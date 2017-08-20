@@ -37,12 +37,15 @@ private:
 
 Cell::Cell(int i) {
 	if (i != 0) {
-		numbers = {0,0,0,0,0,0,0,0,0};
+		for (int i = 0; i < 9; i++) {
+			numbers[i] = 0;
+		}
 		finalNumber = i;
 		return;
 	}
-
-	numbers = {1,2,3,4,5,6,7,8,9};
+	for (int i = 0; i < 9; i++) {
+		numbers[i] = i + 1;
+	}
 	finalNumber = i;
 }
 
@@ -72,25 +75,26 @@ public:
 	bool isSolved();
 	void simpleSolve();
 	void printSudoku();
-	Sudoku(char const *fileName);
+	Sudoku(char const *fileName) {
+		fstream myFile;
+		myFile.open(fileName, ios::in);
+		string line;
+
+		int row = 0;
+		while (getline(myFile, line)) {
+			for (int column = 0; column < 9; column++) {
+				sudoku[row][column] = Cell(stoi(line));
+				line.erase(0,2);
+			}
+			row++;
+		}
+
+		myFile.close();
+	}
+	;
 private:
 	Cell sudoku[9][9];
 };
-
-Sudoku::Sudoku(char const *fileName){
-	fstream myFile;
-	myFile.open(fileName, ios::in);
-	string line;
-
-
-	while (getline(myFile,line)) {
-
-	}
-
-
-
-	myFile.close();
-}
 
 bool Sudoku::isSolved() {
 	for (int x = 0; x < 9; x++) {
@@ -103,16 +107,16 @@ bool Sudoku::isSolved() {
 	return true;
 }
 
-void Sudoku::printSudoku(){
+void Sudoku::printSudoku() {
 	for (int x = 0; x < 9; x++) {
-			for (int y = 0; y < 10; y++) {
-				if (y == 9) {
-					std::cout<<"\n";
-				} else {
-					std::cout<<sudoku[x][y].getFinalNumber();
-				}
+		for (int y = 0; y < 10; y++) {
+			if (y == 9) {
+				std::cout << "\n";
+			} else {
+				std::cout << sudoku[x][y].getFinalNumber();
 			}
 		}
+	}
 }
 
 int main() {
