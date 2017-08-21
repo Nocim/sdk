@@ -16,7 +16,8 @@ class Cell {
 public:
 	void setFinal();
 	bool isFinal();
-	Cell(int);
+	Cell(int num);
+	Cell(void);
 
 	int getFinalNumber() const {
 		return finalNumber;
@@ -35,19 +36,28 @@ private:
 	int finalNumber;
 };
 
-Cell::Cell(int i) {
-	if (i != 0) {
+Cell::Cell(void) {
+	finalNumber = 0;
+
+	for (int i = 0; i < 9; i++) {
+			numbers[i] = i + 1;
+		}
+}
+
+Cell::Cell(int num) {
+	if (num != 0) {
 		for (int i = 0; i < 9; i++) {
 			numbers[i] = 0;
 		}
-		finalNumber = i;
+		finalNumber = num;
 		return;
 	}
 	for (int i = 0; i < 9; i++) {
 		numbers[i] = i + 1;
 	}
-	finalNumber = i;
+	finalNumber = num;
 }
+;
 
 bool Cell::isFinal() {
 	int count = 0;
@@ -61,6 +71,7 @@ bool Cell::isFinal() {
 	}
 	return false;
 }
+;
 
 void Cell::setFinal() {
 	for (int i = 0; i < 9; i++) {
@@ -69,6 +80,7 @@ void Cell::setFinal() {
 		}
 	}
 }
+;
 
 class Sudoku {
 public:
@@ -81,10 +93,14 @@ public:
 		string line;
 
 		int row = 0;
+		int cellNum = 0;
 		while (getline(myFile, line)) {
+			cout<<"reading line\n";
+			cout<<line;
 			for (int column = 0; column < 9; column++) {
-				sudoku[row][column] = Cell(stoi(line));
-				line.erase(0,2);
+				cellNum = stoi(line);
+				sudoku[row][column] = Cell(cellNum);
+				line.erase(0, 2);
 			}
 			row++;
 		}
@@ -106,6 +122,7 @@ bool Sudoku::isSolved() {
 	}
 	return true;
 }
+;
 
 void Sudoku::printSudoku() {
 	for (int x = 0; x < 9; x++) {
@@ -118,9 +135,11 @@ void Sudoku::printSudoku() {
 		}
 	}
 }
+;
 
 int main() {
 
-	Sudoku sudoku();
+	Sudoku sudoku("/home/Nocim/sudokutest/test1");
+	sudoku.printSudoku();
 
 }
